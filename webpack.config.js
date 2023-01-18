@@ -1,23 +1,28 @@
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
-// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: { main: ["./src/index.js"] },
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.join(__dirname, "./dist"),
+    publicPath: "/dist",
   },
   optimization: {
     minimizer: [new TerserPlugin({ extractComments: false })],
   },
-  // plugins: [new MiniCssExtractPlugin({ filename: "style.css" })],
+  plugins: [
+    new MiniCssExtractPlugin({ filename: "css/[name].css" }),
+    new HtmlWebpackPlugin(),
+  ],
   module: {
     rules: [
       {
         test: /\.s[ac]ss$/i,
         use: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
@@ -35,4 +40,5 @@ module.exports = {
       },
     ],
   },
+  mode: "development",
 };
