@@ -2,6 +2,7 @@ const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   entry: { main: ["./src/index.js"] },
@@ -16,6 +17,9 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({ filename: "css/[name].css" }),
     new HtmlWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: ["dist"],
+    }),
   ],
   module: {
     rules: [
@@ -40,5 +44,12 @@ module.exports = {
       },
     ],
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "./dist"),
+    },
+    port: 9000,
+  },
   mode: "development",
+  devtool: "inline-source-map",
 };

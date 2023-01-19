@@ -1,12 +1,6 @@
 import _ from "lodash";
-import "./style.scss";
+import { createHeader } from "./components/Header";
 
-function component() {
-  const element = document.createElement("div");
+import "./sass/main.scss";
 
-  element.innerHTML = _.join(["Hello", "webpack"], " ");
-
-  return element;
-}
-
-document.body.appendChild(component());
+document.body.appendChild(createHeader());
