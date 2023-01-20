@@ -1,6 +1,14 @@
+$header-color: rgb(213, 213, 213);
+
 header {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid gray;
+  border: 2px solid $header-color;
+}
+
+.divider {
+  margin-top: 5px;
+  height: 10px;
+  background: $header-color;
 }

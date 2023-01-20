@@ -1,6 +1,9 @@
 import _ from "lodash";
-import { createHeader } from "./components/Header";
+import { createDivider, createHeader } from "./components/Header";
+import { createToolbar } from "./components/Toolbar";
 
 import "./sass/main.scss";
 
-document.body.appendChild(createHeader());
+createHeader();
+createDivider();
+createToolbar();

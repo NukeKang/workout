@@ -16,7 +16,9 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({ filename: "css/[name].css" }),
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      title: "Work Out Routine",
+    }),
     new CleanWebpackPlugin({
       cleanAfterEveryBuildPatterns: ["dist"],
     }),
