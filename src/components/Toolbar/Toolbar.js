@@ -1,3 +1,4 @@
+import { removeElement } from "../../utils";
 import { createAddWorkOutButton } from "./AddWorkOutButton";
 
 export const createToolbar = () => {
@@ -27,6 +28,8 @@ const createDeleteWokrOutButton = () => {
   button.className = "btn deleteWorkOut";
   document.querySelector(".buttonWrap").appendChild(button);
   document.querySelector(".deleteWorkOut").textContent = "삭제";
+
+  button.addEventListener("click", deleteWorkOut);
 };
 
 const createTotalWorkOutTime = () => {
@@ -35,4 +38,14 @@ const createTotalWorkOutTime = () => {
   document.querySelector(".toolbar").appendChild(span);
   document.querySelector(".totalWorkOutTime").textContent =
     "전체 시간: 7분 20초";
+};
+
+const deleteWorkOut = () => {
+  const removeCheckBoxes = document.getElementsByName("checkbox");
+
+  for (let i = 0; i < removeCheckBoxes.length; i++) {
+    if (removeCheckBoxes[i].checked) {
+      removeCheckBoxes[i].parentElement.remove();
+    }
+  }
 };
