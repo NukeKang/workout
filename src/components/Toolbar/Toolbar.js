@@ -1,4 +1,3 @@
-import { removeElement } from "../../utils";
 import { createAddWorkOutButton } from "./AddWorkOutButton";
 
 export const createToolbar = () => {

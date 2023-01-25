@@ -7,3 +7,7 @@
 
 # ETC
 /.vscode
+dist/bundle.js
+dist/css/main.css
+dist/index.html
+

@@ -17,9 +17,10 @@
   flex-direction: column;
 }
 
-.workOutList {
+.workOutListContainer {
   border: 2px solid $header-color;
   height: 100%;
+  padding: 10px;
 }
 
 .startButtonWrap {

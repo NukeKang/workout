@@ -1,11 +1,15 @@
 export const createWorkOutList = () => {
   const wrap = document.createElement("div");
-  const div = document.createElement("div");
+  const container = document.createElement("div");
+  const ul = document.createElement("ul");
 
   wrap.className = "workOutlistWrap";
-  div.className = "workOutList";
+  container.className = "workOutListContainer";
+  ul.className = "workOutListGroup";
+
   document.querySelector(".contentsWrap").appendChild(wrap);
-  document.querySelector(".workOutlistWrap").appendChild(div);
+  document.querySelector(".workOutlistWrap").appendChild(container);
+  document.querySelector(".workOutListContainer").appendChild(ul);
 
   workOutStartButton();
 };
