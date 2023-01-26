@@ -1,13 +1,11 @@
 export const createAddWorkOutButton = () => {
   const button = document.createElement("button");
-  button.className = "btn addWorkOut";
+  button.classList.add("addWorkOut");
+  button.textContent = "+ 운동 추가";
 
-  document.querySelector(".buttonWrap").appendChild(button);
+  button.addEventListener("click", showInputWindow);
 
-  const addWorkOutButton = document.querySelector(".addWorkOut");
-  addWorkOutButton.textContent = "+ 운동 추가";
-
-  addWorkOutButton.addEventListener("click", showInputWindow);
+  return button;
 };
 
 const showInputWindow = () => {

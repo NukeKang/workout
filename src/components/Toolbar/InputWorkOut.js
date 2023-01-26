@@ -1,6 +1,16 @@
 export const createInputWorkOut = () => {
+  const form = createForm();
+
+  inputWorkOutName(form);
+  inputWorkOutTimePerSet(form);
+  inputWorkOutSet(form);
+  saveButton(form);
+  cancelButton(form);
+};
+
+const createForm = () => {
   const form = document.createElement("form");
-  form.className = "inputWorkOutForm";
+  form.classList.add("inputWorkOutForm");
   document.querySelector(".workOutListContainer").appendChild(form);
 
   form.addEventListener("submit", (event) => {
@@ -12,16 +22,12 @@ export const createInputWorkOut = () => {
     event.target["set"].value = 1;
   });
 
-  inputWorkOutName(form);
-  inputWorkOutTimePerSet();
-  inputWorkOutSet();
-  saveButton();
-  cancelButton();
+  return form;
 };
 
 const inputWorkOutName = (form) => {
   const label = document.createElement("label");
-  label.className = "nameLabel";
+  label.classList.add("nameLabel");
   label.setAttribute("for", "workOutName");
   label.textContent = "이름";
 
@@ -35,79 +41,77 @@ const inputWorkOutName = (form) => {
   form.appendChild(input);
 };
 
-const inputWorkOutTimePerSet = () => {
+const inputWorkOutTimePerSet = (form) => {
   const label = document.createElement("label");
-  const input = document.createElement("input");
-  label.className = "timeLabel";
-  input.id = "timePerSet";
+  label.classList.add("timeLabel");
   label.setAttribute("for", "timePerSet");
+  label.textContent = "초";
 
+  const input = document.createElement("input");
+  input.id = "timePerSet";
   input.setAttribute("type", "number");
   input.setAttribute("name", "timePerSet");
   input.setAttribute("value", 30);
-
   input.setAttribute("placeholder", "30");
 
-  document.querySelector(".inputWorkOutForm").appendChild(input);
-  document.querySelector(".inputWorkOutForm").appendChild(label);
-  document.querySelector(".timeLabel").textContent = "초";
+  form.appendChild(label);
+  form.appendChild(input);
 };
 
-const inputWorkOutSet = () => {
+const inputWorkOutSet = (form) => {
   const label = document.createElement("label");
-  const input = document.createElement("input");
-  label.className = "setLabel";
-  input.id = "workOutSet";
-
+  label.classList.add("setLabel");
   label.setAttribute("for", "workOutSet");
+  label.textContent = "세트";
 
+  const input = document.createElement("input");
+  input.id = "workOutSet";
   input.setAttribute("type", "number");
   input.setAttribute("value", 1);
-
   input.setAttribute("name", "set");
-
   input.setAttribute("placeholder", "1");
 
-  document.querySelector(".inputWorkOutForm").appendChild(input);
-  document.querySelector(".inputWorkOutForm").appendChild(label);
-  document.querySelector(".setLabel").textContent = "세트";
+  form.appendChild(label);
+  form.appendChild(input);
 };
 
-const saveButton = () => {
+const saveButton = (form) => {
   const button = document.createElement("button");
-  button.className = "btn saveWorkOut";
+  button.classList.add("saveWorkOutButton");
   button.setAttribute("type", "submit");
+  button.textContent = "저장";
 
-  document.querySelector(".inputWorkOutForm").appendChild(button);
-  document.querySelector(".saveWorkOut").textContent = "저장";
+  form.appendChild(button);
 };
 
-const cancelButton = () => {
+const cancelButton = (form) => {
   const button = document.createElement("button");
-  button.className = "btn cancel";
+  button.classList.add("cancelButton");
   button.type = "button";
-
-  document.querySelector(".inputWorkOutForm").appendChild(button);
-  document.querySelector(".cancel").textContent = "취소";
-
+  button.textContent = "취소";
   button.addEventListener("click", () => {
     const inputWorkOutForm = document.querySelector(".inputWorkOutForm");
 
     inputWorkOutForm.classList.remove("active");
   });
+
+  form.appendChild(button);
 };
 
 const addWorkOut = (event) => {
   const li = document.createElement("li");
+
   const checkbox = document.createElement("input");
-  const span = document.createElement("span");
-
-  li.appendChild(checkbox);
-
   checkbox.setAttribute("type", "checkbox");
   checkbox.setAttribute("name", "checkbox");
 
-  document.querySelector(".workOutListGroup").appendChild(li);
+  const span = document.createElement("span");
+  const workOutName = event.target["name"].value;
+  const timePerSet = event.target["timePerSet"].value;
+  const set = event.target["set"].value;
+  span.textContent = `${workOutName} ${timePerSet}초 ${set}세트`;
+
+  li.appendChild(checkbox);
   li.appendChild(span);
-  span.textContent = `${event.target["name"].value} ${event.target["timePerSet"].value}초 ${event.target["set"].value}세트`;
+  document.querySelector(".workOutListGroup").appendChild(li);
 };

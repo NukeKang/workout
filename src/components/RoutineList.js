@@ -1,6 +1,6 @@
 export const createRoutineList = () => {
   const div = document.createElement("div");
+  div.classList.add("routineList");
 
-  div.className = "routineList";
-  document.querySelector(".contentsWrap").appendChild(div);
+  return div;
 };

@@ -11,6 +11,6 @@ export const createHeader = () => {
 
 export const createDivider = () => {
   const div = document.createElement("div");
-  div.className = "divider";
+  div.classList.add("divider");
   document.body.appendChild(div);
 };

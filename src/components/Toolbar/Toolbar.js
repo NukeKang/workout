@@ -2,36 +2,48 @@ import { createAddWorkOutButton } from "./AddWorkOutButton";
 
 export const createToolbar = () => {
   const div = document.createElement("div");
-  const buttonWrap = document.createElement("div");
+  div.classList.add("toolbar");
 
-  div.className = "toolbar";
-  buttonWrap.className = "buttonWrap";
-
-  document.body.appendChild(div);
-  document.querySelector(".toolbar").appendChild(buttonWrap);
-
-  createAddRoutineButton();
-  createAddWorkOutButton();
-  createDeleteWokrOutButton();
+  const buttonWrap = createButtonWrap();
+  div.appendChild(buttonWrap);
 
   const ele = createTotalWorkOutTime();
   div.appendChild(ele);
+
+  document.body.appendChild(div);
+};
+
+const createButtonWrap = () => {
+  const buttonWrap = document.createElement("div");
+  buttonWrap.classList.add("buttonWrap");
+
+  const addRoutineButton = createAddRoutineButton();
+  const AddWorkOutButton = createAddWorkOutButton();
+  const deleteWorkOutButton = createDeleteWokrOutButton();
+
+  buttonWrap.appendChild(addRoutineButton);
+  buttonWrap.appendChild(AddWorkOutButton);
+  buttonWrap.appendChild(deleteWorkOutButton);
+
+  return buttonWrap;
 };
 
 const createAddRoutineButton = () => {
   const button = document.createElement("button");
-  button.className = "btn addRoutine";
-  document.querySelector(".buttonWrap").appendChild(button);
-  document.querySelector(".addRoutine").textContent = "새 운동 루틴 +";
+  button.classList.add("addRoutineButton");
+  button.textContent = "새 운동 루틴 +";
+
+  return button;
 };
 
 const createDeleteWokrOutButton = () => {
   const button = document.createElement("button");
-  button.className = "btn deleteWorkOut";
-  document.querySelector(".buttonWrap").appendChild(button);
-  document.querySelector(".deleteWorkOut").textContent = "삭제";
+  button.classList.add("deleteWorkOut");
+  button.textContent = "삭제";
 
   button.addEventListener("click", deleteWorkOut);
+
+  return button;
 };
 
 const createTotalWorkOutTime = () => {
@@ -40,8 +52,6 @@ const createTotalWorkOutTime = () => {
   span.textContent = "전체 시간: 0초";
 
   return span;
-
-  // document.querySelector(".toolbar").appendChild(span);
 };
 
 const deleteWorkOut = () => {

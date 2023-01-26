@@ -1,28 +1,37 @@
 export const createWorkOutList = () => {
   const wrap = document.createElement("div");
+  wrap.classList.add("workOutlistWrap");
+
   const container = document.createElement("div");
+  container.classList.add("workOutListContainer");
+
   const ul = document.createElement("ul");
+  ul.classList.add("workOutListGroup");
 
-  wrap.className = "workOutlistWrap";
-  container.className = "workOutListContainer";
-  ul.className = "workOutListGroup";
+  const workOutButton = createWorkOutButtonWrap();
 
-  document.querySelector(".contentsWrap").appendChild(wrap);
-  document.querySelector(".workOutlistWrap").appendChild(container);
-  document.querySelector(".workOutListContainer").appendChild(ul);
+  wrap.appendChild(container);
+  wrap.appendChild(workOutButton);
+  container.appendChild(ul);
 
-  createWorkOutStartButton();
+  return wrap;
+};
+
+const createWorkOutButtonWrap = () => {
+  const div = document.createElement("div");
+  div.classList.add("startButtonWrap");
+
+  const workOutStartButton = createWorkOutStartButton();
+
+  div.appendChild(workOutStartButton);
+
+  return div;
 };
 
 const createWorkOutStartButton = () => {
-  const div = document.createElement("div");
   const button = document.createElement("button");
+  button.classList.add("workOutStartButton");
+  button.textContent = "운동 시작";
 
-  div.className = "startButtonWrap";
-
-  document.querySelector(".workOutlistWrap").appendChild(div);
-
-  button.className = "btn workOutStart";
-  document.querySelector(".startButtonWrap").appendChild(button);
-  document.querySelector(".workOutStart").textContent = "운동 시작";
+  return button;
 };
