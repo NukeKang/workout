@@ -1,4 +1,5 @@
 import { createAddWorkOutButton } from "./AddWorkOutButton";
+import { createWorkOutItem, getAllWorkOuts, setWorkOuts } from "./InputWorkOut";
 
 export const createToolbar = () => {
   const div = document.createElement("div");
@@ -55,11 +56,13 @@ const createTotalWorkOutTime = () => {
 };
 
 const deleteWorkOut = () => {
-  const removeCheckBoxes = document.getElementsByName("checkbox");
-
-  for (let i = 0; i < removeCheckBoxes.length; i++) {
-    if (removeCheckBoxes[i].checked) {
-      removeCheckBoxes[i].parentElement.remove();
-    }
-  }
+  // const removeCheckBoxes = document.getElementsByName("checkbox");
+  const li = document.querySelector(".workout-item");
+  // for (let i = 0; i < removeCheckBoxes.length; i++) {
+  //   if (removeCheckBoxes[i].checked) {
+  //     getAllWorkOuts().splice(i, 1);
+  //     createWorkOutItem();
+  //   }
+  // }
+  // const newWorkOuts = getAllWorkOuts().filter(() =>)
 };

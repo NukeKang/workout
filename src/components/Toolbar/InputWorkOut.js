@@ -15,7 +15,14 @@ const createForm = () => {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    addWorkOut(event);
+
+    appendWorkOuts(
+      event.target["name"].value,
+      event.target["timePerSet"].value,
+      event.target["set"].value
+    );
+    createWorkOutItem();
+    getAllWorkOuts();
 
     event.target["name"].value = "";
     event.target["timePerSet"].value = 30;
@@ -109,9 +116,63 @@ const addWorkOut = (event) => {
   const workOutName = event.target["name"].value;
   const timePerSet = event.target["timePerSet"].value;
   const set = event.target["set"].value;
+
   span.textContent = `${workOutName} ${timePerSet}초 ${set}세트`;
 
   li.appendChild(checkbox);
   li.appendChild(span);
   document.querySelector(".workOutListGroup").appendChild(li);
+};
+
+let workOuts = [];
+let id = 0;
+
+export const setWorkOuts = (newWorkOuts) => {
+  workOuts = newWorkOuts;
+};
+
+export const getAllWorkOuts = () => {
+  return workOuts;
+};
+
+const appendWorkOuts = (name, time, set) => {
+  const newId = id++;
+  const newWorkOuts = getAllWorkOuts().concat({
+    id: newId,
+    workOutName: name,
+    timePerSet: time,
+    wholeSet: set,
+  });
+
+  setWorkOuts(newWorkOuts);
+};
+
+export const createWorkOutItem = () => {
+  document.querySelector(".workOutListGroup").innerHTML = null;
+
+  const allWorkOuts = getAllWorkOuts();
+
+  allWorkOuts.forEach((item) => {
+    const li = document.createElement("li");
+    li.classList.add("workout-item");
+    li.setAttribute("data-id", item.id);
+
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("name", "checkbox");
+    checkbox.addEventListener("click", () => {
+      li.classList.add("checked");
+    });
+
+    const span = document.createElement("span");
+    span.textContent = `${item.workOutName} ${item.timePerSet}초 ${item.wholeSet}세트`;
+
+    const button = document.createElement("button");
+    button.textContent = "✎";
+
+    li.appendChild(checkbox);
+    li.appendChild(span);
+    li.appendChild(button);
+    document.querySelector(".workOutListGroup").appendChild(li);
+  });
 };
