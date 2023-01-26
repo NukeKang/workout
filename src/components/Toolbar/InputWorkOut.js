@@ -12,28 +12,27 @@ export const createInputWorkOut = () => {
     event.target["set"].value = 1;
   });
 
-  inputWorkOutName();
+  inputWorkOutName(form);
   inputWorkOutTimePerSet();
   inputWorkOutSet();
   saveButton();
   cancelButton();
 };
 
-const inputWorkOutName = () => {
+const inputWorkOutName = (form) => {
   const label = document.createElement("label");
-  const input = document.createElement("input");
   label.className = "nameLabel";
-  input.id = "workOutName";
-
   label.setAttribute("for", "workOutName");
+  label.textContent = "이름";
 
+  const input = document.createElement("input");
+  input.id = "workOutName";
   input.setAttribute("required", true);
   input.setAttribute("type", "text");
   input.setAttribute("name", "name");
 
-  document.querySelector(".inputWorkOutForm").appendChild(label);
-  document.querySelector(".nameLabel").textContent = "이름";
-  document.querySelector(".inputWorkOutForm").appendChild(input);
+  form.appendChild(label);
+  form.appendChild(input);
 };
 
 const inputWorkOutTimePerSet = () => {
