@@ -15,18 +15,19 @@ const createForm = () => {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-
+    console.log(document.querySelectorAll("workout-item").dataset.id);
     appendWorkOuts(
       event.target["name"].value,
       event.target["timePerSet"].value,
       event.target["set"].value
     );
-    createWorkOutItem();
+    createAllWorkOuts();
     getAllWorkOuts();
 
     event.target["name"].value = "";
     event.target["timePerSet"].value = 30;
     event.target["set"].value = 1;
+    form.classList.remove("active");
   });
 
   return form;
@@ -98,30 +99,13 @@ const cancelButton = (form) => {
   button.textContent = "취소";
   button.addEventListener("click", () => {
     const inputWorkOutForm = document.querySelector(".inputWorkOutForm");
-
+    document.getElementById("workOutName").value = "";
+    document.getElementById("timePerSet").value = 30;
+    document.getElementById("workOutSet").value = 1;
     inputWorkOutForm.classList.remove("active");
   });
 
   form.appendChild(button);
-};
-
-const addWorkOut = (event) => {
-  const li = document.createElement("li");
-
-  const checkbox = document.createElement("input");
-  checkbox.setAttribute("type", "checkbox");
-  checkbox.setAttribute("name", "checkbox");
-
-  const span = document.createElement("span");
-  const workOutName = event.target["name"].value;
-  const timePerSet = event.target["timePerSet"].value;
-  const set = event.target["set"].value;
-
-  span.textContent = `${workOutName} ${timePerSet}초 ${set}세트`;
-
-  li.appendChild(checkbox);
-  li.appendChild(span);
-  document.querySelector(".workOutListGroup").appendChild(li);
 };
 
 let workOuts = [];
@@ -139,6 +123,7 @@ const appendWorkOuts = (name, time, set) => {
   const newId = id++;
   const newWorkOuts = getAllWorkOuts().concat({
     id: newId,
+    checked: false,
     workOutName: name,
     timePerSet: time,
     wholeSet: set,
@@ -147,8 +132,9 @@ const appendWorkOuts = (name, time, set) => {
   setWorkOuts(newWorkOuts);
 };
 
-export const createWorkOutItem = () => {
+export const createAllWorkOuts = () => {
   document.querySelector(".workOutListGroup").innerHTML = null;
+  const inputWorkOutForm = document.querySelector(".inputWorkOutForm");
 
   const allWorkOuts = getAllWorkOuts();
 
@@ -161,7 +147,11 @@ export const createWorkOutItem = () => {
     checkbox.setAttribute("type", "checkbox");
     checkbox.setAttribute("name", "checkbox");
     checkbox.addEventListener("click", () => {
-      li.classList.add("checked");
+      if (item.checked) {
+        item.checked = false;
+      } else {
+        item.checked = true;
+      }
     });
 
     const span = document.createElement("span");
@@ -169,10 +159,37 @@ export const createWorkOutItem = () => {
 
     const button = document.createElement("button");
     button.textContent = "✎";
+    button.addEventListener("click", () => {
+      console.log(item.id);
+      document.getElementById("workOutName").value = item.workOutName;
+      document.getElementById("timePerSet").value = item.timePerSet;
+      document.getElementById("workOutSet").value = item.wholeSet;
+
+      inputWorkOutForm.classList.add("active");
+      // editWorkOuts(
+      //   document.getElementById("workOutName").value,
+      //   document.getElementById("timePerSet").value,
+      //   document.getElementById("workOutSet").value,
+      //   item.id
+      // );
+    });
 
     li.appendChild(checkbox);
     li.appendChild(span);
     li.appendChild(button);
     document.querySelector(".workOutListGroup").appendChild(li);
   });
+};
+
+const editWorkOuts = (name, time, set, workOutId) => {
+  const workouts = getAllWorkOuts();
+  const newWorkOuts = workouts.map((item) =>
+    item.id === workOutId
+      ? { ...item, workOutName: name, timePerSet: time, wholeSet: set }
+      : item
+  );
+
+  console.log(newWorkOuts);
+  // setWorkOuts(newWorkOuts);
+  // createAllWorkOuts();
 };
