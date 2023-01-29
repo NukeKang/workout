@@ -15,12 +15,35 @@ const createForm = () => {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log(document.querySelectorAll("workout-item").dataset.id);
-    appendWorkOuts(
-      event.target["name"].value,
-      event.target["timePerSet"].value,
-      event.target["set"].value
-    );
+
+    const li = document.getElementsByClassName("workout-item");
+
+    // debugger;
+    // const workOuts = getAllWorkOuts();
+    // const newWorkOuts = workOuts.map((item) =>
+    //   item.willUpdate === true
+    //     ? {
+    //         ...item,
+    //         workOutName: event.target["name"].value,
+    //         timePerSet: event.target["timePerSet"].value,
+    //         wholeSet: event.target["set"].value,
+    //         willUpdate: false,
+    //       }
+    //     : item
+    // );
+    [...li].map((item) => item.dataset.id === targetId)
+      ? editWorkOuts(
+          event.target["name"].value,
+          event.target["timePerSet"].value,
+          event.target["set"].value,
+          targetId
+        )
+      : appendWorkOuts(
+          event.target["name"].value,
+          event.target["timePerSet"].value,
+          event.target["set"].value
+        );
+
     createAllWorkOuts();
     getAllWorkOuts();
 
@@ -110,6 +133,7 @@ const cancelButton = (form) => {
 
 let workOuts = [];
 let id = 0;
+let targetId = 0;
 
 export const setWorkOuts = (newWorkOuts) => {
   workOuts = newWorkOuts;
@@ -161,10 +185,12 @@ export const createAllWorkOuts = () => {
     button.textContent = "✎";
     button.addEventListener("click", () => {
       console.log(item.id);
+      targetId = item.id;
       document.getElementById("workOutName").value = item.workOutName;
       document.getElementById("timePerSet").value = item.timePerSet;
       document.getElementById("workOutSet").value = item.wholeSet;
 
+      console.log(getAllWorkOuts());
       inputWorkOutForm.classList.add("active");
       // editWorkOuts(
       //   document.getElementById("workOutName").value,
@@ -190,6 +216,6 @@ const editWorkOuts = (name, time, set, workOutId) => {
   );
 
   console.log(newWorkOuts);
-  // setWorkOuts(newWorkOuts);
-  // createAllWorkOuts();
+  setWorkOuts(newWorkOuts);
+  createAllWorkOuts();
 };
