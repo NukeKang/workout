@@ -1,3 +1,8 @@
+let editMode = false;
+let workOuts = [];
+let id = 0;
+let targetId;
+
 export const createInputWorkOut = () => {
   const form = createForm();
 
@@ -8,6 +13,22 @@ export const createInputWorkOut = () => {
   cancelButton(form);
 };
 
+const editWorkOuts = (name, time, set, workOutId) => {
+  const workOuts = getAllWorkOuts();
+  const newWorkOuts = workOuts.map((item) =>
+    item.id === workOutId
+      ? {
+          ...item,
+          workOutName: name,
+          timePerSet: time,
+          wholeSet: set,
+        }
+      : item
+  );
+
+  setWorkOuts(newWorkOuts);
+};
+
 const createForm = () => {
   const form = document.createElement("form");
   form.classList.add("inputWorkOutForm");
@@ -16,40 +37,27 @@ const createForm = () => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const li = document.getElementsByClassName("workout-item");
-
-    // debugger;
-    // const workOuts = getAllWorkOuts();
-    // const newWorkOuts = workOuts.map((item) =>
-    //   item.willUpdate === true
-    //     ? {
-    //         ...item,
-    //         workOutName: event.target["name"].value,
-    //         timePerSet: event.target["timePerSet"].value,
-    //         wholeSet: event.target["set"].value,
-    //         willUpdate: false,
-    //       }
-    //     : item
-    // );
-    [...li].map((item) => item.dataset.id === targetId)
-      ? editWorkOuts(
-          event.target["name"].value,
-          event.target["timePerSet"].value,
-          event.target["set"].value,
-          targetId
-        )
-      : appendWorkOuts(
-          event.target["name"].value,
-          event.target["timePerSet"].value,
-          event.target["set"].value
-        );
+    if (editMode) {
+      editWorkOuts(
+        event.target["name"].value,
+        event.target["timePerSet"].value,
+        event.target["set"].value,
+        targetId
+      );
+    } else {
+      appendWorkOuts(
+        event.target["name"].value,
+        event.target["timePerSet"].value,
+        event.target["set"].value
+      );
+    }
 
     createAllWorkOuts();
-    getAllWorkOuts();
 
     event.target["name"].value = "";
     event.target["timePerSet"].value = 30;
     event.target["set"].value = 1;
+    editMode = false;
     form.classList.remove("active");
   });
 
@@ -131,10 +139,6 @@ const cancelButton = (form) => {
   form.appendChild(button);
 };
 
-let workOuts = [];
-let id = 0;
-let targetId = 0;
-
 export const setWorkOuts = (newWorkOuts) => {
   workOuts = newWorkOuts;
 };
@@ -184,20 +188,13 @@ export const createAllWorkOuts = () => {
     const button = document.createElement("button");
     button.textContent = "✎";
     button.addEventListener("click", () => {
-      console.log(item.id);
       targetId = item.id;
       document.getElementById("workOutName").value = item.workOutName;
       document.getElementById("timePerSet").value = item.timePerSet;
       document.getElementById("workOutSet").value = item.wholeSet;
 
-      console.log(getAllWorkOuts());
+      editMode = true;
       inputWorkOutForm.classList.add("active");
-      // editWorkOuts(
-      //   document.getElementById("workOutName").value,
-      //   document.getElementById("timePerSet").value,
-      //   document.getElementById("workOutSet").value,
-      //   item.id
-      // );
     });
 
     li.appendChild(checkbox);
@@ -205,17 +202,4 @@ export const createAllWorkOuts = () => {
     li.appendChild(button);
     document.querySelector(".workOutListGroup").appendChild(li);
   });
-};
-
-const editWorkOuts = (name, time, set, workOutId) => {
-  const workouts = getAllWorkOuts();
-  const newWorkOuts = workouts.map((item) =>
-    item.id === workOutId
-      ? { ...item, workOutName: name, timePerSet: time, wholeSet: set }
-      : item
-  );
-
-  console.log(newWorkOuts);
-  setWorkOuts(newWorkOuts);
-  createAllWorkOuts();
 };
