@@ -168,7 +168,7 @@ export const createAllWorkOuts = () => {
 
   allWorkOuts.forEach((item) => {
     const li = document.createElement("li");
-    li.classList.add("workout-item");
+    li.classList.add("workoutItem");
     li.setAttribute("data-id", item.id);
 
     const checkbox = document.createElement("input");
@@ -186,7 +186,7 @@ export const createAllWorkOuts = () => {
     span.textContent = `${item.workOutName} ${item.timePerSet}초 ${item.wholeSet}세트`;
 
     const button = document.createElement("button");
-    button.textContent = "✎";
+    button.textContent = "✏️";
     button.addEventListener("click", () => {
       targetId = item.id;
       document.getElementById("workOutName").value = item.workOutName;

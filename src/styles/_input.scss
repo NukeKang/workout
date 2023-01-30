@@ -12,3 +12,15 @@
     opacity: 1;
   }
 }
+
+.inputRoutineForm {
+  border: 2px solid $header-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+
+  &.active {
+    opacity: 1;
+  }
+}

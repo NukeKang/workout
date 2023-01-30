@@ -1,3 +1,4 @@
+import { createAddRoutineButton } from "./AddRoutineButton";
 import { createAddWorkOutButton } from "./AddWorkOutButton";
 import { createAllWorkOuts, getAllWorkOuts, setWorkOuts } from "./InputWorkOut";
 
@@ -27,14 +28,6 @@ const createButtonWrap = () => {
   buttonWrap.appendChild(deleteWorkOutButton);
 
   return buttonWrap;
-};
-
-const createAddRoutineButton = () => {
-  const button = document.createElement("button");
-  button.classList.add("addRoutineButton");
-  button.textContent = "새 운동 루틴 +";
-
-  return button;
 };
 
 const createDeleteWokrOutButton = () => {
