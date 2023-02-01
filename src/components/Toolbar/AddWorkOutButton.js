@@ -2,6 +2,7 @@ export const createAddWorkOutButton = () => {
   const button = document.createElement("button");
   button.classList.add("addWorkOut");
   button.textContent = "+ 운동 추가";
+  button.setAttribute("disabled", true);
 
   button.addEventListener("click", showInputWindow);
 

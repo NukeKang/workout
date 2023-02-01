@@ -34,6 +34,7 @@ const createDeleteWokrOutButton = () => {
   const button = document.createElement("button");
   button.classList.add("deleteWorkOut");
   button.textContent = "삭제";
+  button.setAttribute("disabled", true);
 
   button.addEventListener("click", deleteWorkOut);
 
@@ -42,8 +43,8 @@ const createDeleteWokrOutButton = () => {
 
 const createTotalWorkOutTime = () => {
   const span = document.createElement("span");
+
   span.className = "totalWorkOutTime";
-  span.textContent = "전체 시간: 0초";
 
   return span;
 };

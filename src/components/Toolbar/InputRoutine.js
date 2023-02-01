@@ -1,3 +1,5 @@
+import { editMode } from "../RoutineList";
+
 export const inputRoutineName = (form) => {
   const input = document.createElement("input");
 
@@ -15,6 +17,8 @@ export const inputRoutineName = (form) => {
     const key = event.key || event.keyCode;
 
     if (key === "Escape" || key === "Esc" || key === 27) {
+      editMode.set(false);
+      document.querySelector("#routineName").value = "";
       form.classList.remove("active");
     }
   });

@@ -1,7 +1,33 @@
+import { newTargetRoutineId } from "../RoutineList";
+
 let editMode = false;
-let workOuts = [];
+let workOuts = [
+  {
+    routineId: 1,
+    id: 1,
+    checked: false,
+    workOutName: "벤치프레스",
+    timePerSet: "2",
+    wholeSet: "2",
+  },
+];
 let id = 0;
 let targetId;
+
+const handleTotalWorkOutTime = () => {
+  let totalWorkOutTime = "";
+
+  return {
+    get: () => {
+      return totalWorkOutTime;
+    },
+    set: (newTotalWorkOutTime) => {
+      totalWorkOutTime = newTotalWorkOutTime;
+    },
+  };
+};
+
+export const totalWorkOutTime = handleTotalWorkOutTime();
 
 export const createInputWorkOut = () => {
   const form = createForm();
@@ -28,7 +54,6 @@ const editWorkOuts = (name, time, set, workOutId) => {
 
   setWorkOuts(newWorkOuts);
 };
-
 const createForm = () => {
   const form = document.createElement("form");
   form.classList.add("inputWorkOutForm");
@@ -63,6 +88,9 @@ const createForm = () => {
 
   return form;
 };
+// setTimeout(() => {
+//   createAllWorkOuts();
+// }, 500);
 
 const inputWorkOutName = (form) => {
   const label = document.createElement("label");
@@ -150,6 +178,7 @@ export const getAllWorkOuts = () => {
 const appendWorkOuts = (name, time, set) => {
   const newId = id++;
   const newWorkOuts = getAllWorkOuts().concat({
+    routineId: newTargetRoutineId.get(),
     id: newId,
     checked: false,
     workOutName: name,
@@ -160,26 +189,60 @@ const appendWorkOuts = (name, time, set) => {
   setWorkOuts(newWorkOuts);
 };
 
+const convertSecToTimeString = (sec) => {
+  const minutes = parseInt((sec % 3600) / 60);
+  const seconds = sec % 60;
+
+  return `${minutes}분 ${seconds}초`;
+};
+
 export const createAllWorkOuts = () => {
   document.querySelector(".workOutListGroup").innerHTML = null;
   const inputWorkOutForm = document.querySelector(".inputWorkOutForm");
 
-  const allWorkOuts = getAllWorkOuts();
+  const filteredAllWorkOuts = getAllWorkOuts().filter((item) => {
+    if (item.routineId === newTargetRoutineId.get()) {
+      return true;
+    }
 
-  allWorkOuts.forEach((item) => {
+    return false;
+  });
+
+  totalWorkOutTime.set(
+    filteredAllWorkOuts.reduce(
+      (acc, cur) => acc + Number(cur.timePerSet * cur.wholeSet),
+      0
+    )
+  );
+
+  document.querySelector(
+    "body > div.toolbar > span"
+  ).innerHTML = `전체시간 ${convertSecToTimeString(totalWorkOutTime.get())}`;
+
+  filteredAllWorkOuts.forEach((item) => {
     const li = document.createElement("li");
     li.classList.add("workoutItem");
-    li.setAttribute("data-id", item.id);
 
     const checkbox = document.createElement("input");
     checkbox.setAttribute("type", "checkbox");
     checkbox.setAttribute("name", "checkbox");
+    // checkbox.checked = true;
     checkbox.addEventListener("click", () => {
       if (item.checked) {
         item.checked = false;
       } else {
         item.checked = true;
       }
+
+      // if (isExistCheckedBoxes()) {
+      //   document
+      //     .querySelector(".workOutStartButton")
+      //     .removeAttribute("disabled");
+      // } else {
+      //   document
+      //     .querySelector(".workOutStartButton")
+      //     .setAttribute("disabled", true);
+      // }
     });
 
     const span = document.createElement("span");
@@ -203,3 +266,16 @@ export const createAllWorkOuts = () => {
     document.querySelector(".workOutListGroup").appendChild(li);
   });
 };
+
+// const isExistCheckedBoxes = () => {
+//   const checkboxes = document.getElementsByName("checkbox");
+//   let isTrue = [...checkboxes].some(isChecked);
+
+//   if (isTrue) return true;
+
+//   return false;
+// };
+
+// const isChecked = (item) => {
+//   return item.checked;
+// };

@@ -1,8 +1,37 @@
 import { inputRoutineName } from "./Toolbar/InputRoutine";
-let routines = [];
+import { createAllWorkOuts } from "./Toolbar/InputWorkOut";
+
+let routines = [{ id: 1, routineName: "저녁운동루틴" }];
 let id = 0;
-let targetId;
-let editMode = false;
+
+const handleEditMode = () => {
+  let editMode = false;
+
+  return {
+    get: () => {
+      return editMode;
+    },
+    set: (boolean) => {
+      editMode = boolean;
+    },
+  };
+};
+
+export const editMode = handleEditMode();
+
+const targetRoutine = () => {
+  let targetRoutineId = 1;
+  return {
+    get: () => {
+      return targetRoutineId;
+    },
+    set: (newRoutineId) => {
+      targetRoutineId = newRoutineId;
+    },
+  };
+};
+
+export const newTargetRoutineId = targetRoutine();
 
 export const createRoutineList = () => {
   const div = document.createElement("div");
@@ -16,8 +45,8 @@ export const createRoutineList = () => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    if (editMode) {
-      editRoutines(event.target["routineName"].value, targetId);
+    if (editMode.get()) {
+      editRoutines(event.target["routineName"].value, newTargetRoutineId.get());
     } else {
       appendRoutines(event.target["routineName"].value);
     }
@@ -25,7 +54,7 @@ export const createRoutineList = () => {
     createAllRoutines();
 
     event.target["routineName"].value = "";
-    editMode = false;
+    editMode.set(false);
     form.classList.remove("active");
   });
 
@@ -50,7 +79,7 @@ const setRoutines = (newRoutines) => {
   routines = sortedRoutines;
 };
 
-const getAllRoutines = () => {
+export const getAllRoutines = () => {
   return routines;
 };
 
@@ -58,28 +87,50 @@ const appendRoutines = (name) => {
   const newId = id++;
   const newWorkOuts = getAllRoutines().concat({
     id: newId,
-    checked: false,
     routineName: name,
   });
+  const inputWorkOutForm = document.querySelector(".inputWorkOutForm");
 
   setRoutines(newWorkOuts);
+
+  document
+    .querySelector("body > div.toolbar > div > button.addWorkOut")
+    .setAttribute("disabled", true);
+  document
+    .querySelector("body > div.toolbar > div > button.deleteWorkOut")
+    .setAttribute("disabled", true);
+
+  if (inputWorkOutForm.classList.contains("active")) {
+    inputWorkOutForm.classList.remove("active");
+  }
+  newTargetRoutineId.set(newId);
+  createAllWorkOuts();
 };
 
 const createAllRoutines = () => {
   document.querySelector("#routineListGroup").innerHTML = null;
 
-  const inputRoutineForm = document.querySelector(".inputRoutineForm");
   const allRoutines = getAllRoutines();
 
   allRoutines.forEach((item) => {
     const li = document.createElement("li");
     li.classList.add("routineItem");
-    li.setAttribute("data-id", item.id);
     li.addEventListener("click", (event) => {
       document
         .querySelectorAll("#routineListGroup li")
         .forEach((q) => q.classList.remove("active"));
       event.currentTarget.classList.toggle("active");
+      newTargetRoutineId.set(item.id);
+
+      document.querySelector(".workOutStartButton").removeAttribute("disabled");
+      document
+        .querySelector("body > div.toolbar > div > button.addWorkOut")
+        .removeAttribute("disabled");
+      document
+        .querySelector("body > div.toolbar > div > button.deleteWorkOut")
+        .removeAttribute("disabled");
+
+      createAllWorkOuts();
     });
 
     const span = document.createElement("span");
@@ -103,10 +154,10 @@ const createEditButton = (item) => {
   editButton.addEventListener("click", (event) => {
     event.stopPropagation();
 
-    targetId = item.id;
+    newTargetRoutineId.set(item.id);
     document.getElementById("routineName").value = item.routineName;
 
-    editMode = true;
+    editMode.set(true);
     inputRoutineForm.classList.add("active");
   });
 
@@ -134,7 +185,8 @@ const createDeletebutton = (item) => {
   deleteButton.addEventListener("click", (event) => {
     event.stopPropagation();
 
-    targetId = item.id;
+    newTargetRoutineId.set(item.id);
+
     deleteRoutine();
   });
 
@@ -146,7 +198,7 @@ const deleteRoutine = () => {
   const inputRoutineForm = document.querySelector(".inputRoutineForm");
 
   const newRoutines = routines.filter((item) => {
-    if (item.id === targetId) {
+    if (item.id === newTargetRoutineId.get()) {
       return false;
     }
 
