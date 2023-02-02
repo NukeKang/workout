@@ -1,7 +1,7 @@
 import { inputRoutineName } from "./Toolbar/InputRoutine";
 import { createAllWorkOuts } from "./Toolbar/InputWorkOut";
 
-let routines = [{ id: 1, routineName: "저녁운동루틴" }];
+let routines = [];
 let id = 0;
 
 const handleEditMode = () => {
@@ -9,9 +9,10 @@ const handleEditMode = () => {
 
   return {
     get: () => {
-      return editMode;
+      return;
     },
     set: (boolean) => {
+      //키워드 예약어
       editMode = boolean;
     },
   };
@@ -34,6 +35,7 @@ const targetRoutine = () => {
 export const newTargetRoutineId = targetRoutine();
 
 export const createRoutineList = () => {
+  // create -> paint, wrapper
   const div = document.createElement("div");
   div.classList.add("routineList");
 
@@ -46,6 +48,8 @@ export const createRoutineList = () => {
     event.preventDefault();
 
     if (editMode.get()) {
+      // isEditMode, 변수명 짓기 좀더 확실하게
+      // 2번 이상 쓰는 것들은 변수로 빼버리기 event.target["routineName"].value
       editRoutines(event.target["routineName"].value, newTargetRoutineId.get());
     } else {
       appendRoutines(event.target["routineName"].value);
@@ -66,16 +70,7 @@ export const createRoutineList = () => {
 };
 
 const setRoutines = (newRoutines) => {
-  const sortedRoutines = newRoutines.sort((a, b) => {
-    if (a.id < b.id) {
-      return 1;
-    }
-    if (a.id > b.id) {
-      return -1;
-    }
-
-    return 0;
-  });
+  const sortedRoutines = newRoutines.sort((a, b) => b.id - a.id);
   routines = sortedRoutines;
 };
 
@@ -89,10 +84,11 @@ const appendRoutines = (name) => {
     id: newId,
     routineName: name,
   });
+  // id로 찾는 것이 더 명확(부채), 한번 찾아놓은것은 따로 관리하는 방법도 고민해보기.
   const inputWorkOutForm = document.querySelector(".inputWorkOutForm");
 
   setRoutines(newWorkOuts);
-
+  // 의존성 문제, body부터 찾아들어가게됨. DI 의존성 문제에 대해서 고민. component에 대한 고민부터. why
   document
     .querySelector("body > div.toolbar > div > button.addWorkOut")
     .setAttribute("disabled", true);
@@ -152,7 +148,7 @@ const createEditButton = (item) => {
   const editButton = document.createElement("button");
   editButton.textContent = "✏️";
   editButton.addEventListener("click", (event) => {
-    event.stopPropagation();
+    event.stopPropagation(); // dlqps
 
     newTargetRoutineId.set(item.id);
     document.getElementById("routineName").value = item.routineName;
@@ -196,14 +192,10 @@ const createDeletebutton = (item) => {
 const deleteRoutine = () => {
   const routines = getAllRoutines();
   const inputRoutineForm = document.querySelector(".inputRoutineForm");
-
-  const newRoutines = routines.filter((item) => {
-    if (item.id === newTargetRoutineId.get()) {
-      return false;
-    }
-
-    return true;
-  });
+  // 함수 열지 않고
+  const newRoutines = routines.filter(
+    (item) => item.id !== newTargetRoutineId.get()
+  );
 
   if (inputRoutineForm.classList.contains("active")) {
     inputRoutineForm.classList.remove("active");
