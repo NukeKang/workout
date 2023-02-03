@@ -188,31 +188,6 @@ const appendWorkOuts = (name, time, set) => {
 
   setWorkOuts(newWorkOuts);
 };
-// ms => 년 월 일 시 분 초로 변환 시키는 함수 만들기.
-function msConvertToDate(ms) {
-  let second;
-  let minute;
-  let hour;
-  let day;
-  let month;
-  let year;
-
-  second = Math.floor((ms / 1000) % 60);
-  minute = Math.floor((ms / 1000 / 60) % 60);
-  hour = Math.floor((ms / 1000 / 60 / 60) % 24);
-  day = Math.floor((ms / 1000 / 60 / 60 / 24) % 30);
-  month = Math.floor((ms / 1000 / 60 / 60 / 24 / 30) % 12);
-  year = Math.floor(ms / 1000 / 60 / 60 / 24 / 30 / 12);
-
-  return {
-    second,
-    minute,
-    hour,
-    day,
-    month,
-    year,
-  };
-}
 
 const convertSecToTimeString = (sec) => {
   const minutes = parseInt((sec % 3600) / 60);
